@@ -22,10 +22,9 @@ public class PedidoQueueGateway implements Consumer<Pedido> {
             log.info("Pedido recebido");
             String enderecoEntrega = pedido.getEnderecoEntrega().trim();
             String[] partes = enderecoEntrega.split(",");
-            if (partes.length > 1) {
-                String cep = partes[1].trim().replaceAll("[^\\d]", "");
-                pedido.setCep(cep);
-            }
+            if (partes.length > 0) {
+                String cep = partes[0].trim().replaceAll("[^\\d]", "");
+                pedido.setCep(cep);}
             pedido.setStatus(StatusPedido.PENDENTE);
             pedidoGateway.salvar(pedido);
             log.info("Pedido salvo");
