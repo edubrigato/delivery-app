@@ -16,21 +16,5 @@ services:
     env_file:
       - .env
 
-  rabbitmq:
-    image: "rabbitmq:3-management"
-    container_name: rabbitmq
-    restart: always
-    ports:
-      - "15672:15672"   # Interface de gerenciamento do RabbitMQ
-      - "5672:5672"     # Porta do RabbitMQ para comunicação
-    environment:
-      RABBITMQ_DEFAULT_USER: ${QUEUE_USER}
-      RABBITMQ_DEFAULT_PASS: ${QUEUE_PASSWORD}
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-    env_file:
-      - .env
-
 volumes:
   postgres_data:
-  rabbitmq-data:
