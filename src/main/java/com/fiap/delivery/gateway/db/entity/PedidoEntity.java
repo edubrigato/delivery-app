@@ -1,35 +1,32 @@
 package com.fiap.delivery.gateway.db.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fiap.delivery.domain.StatusPedido;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "entregador")
-@AllArgsConstructor
+@Table(name = "pedido")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class EntregadorEntity {
+public class PedidoEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
-    private String cpf;
-    private String nome;
-    private String endereco;
-    private String telefone;
-    private String placaVeiculo;
-    private LocalDate dataNascimento;
+    private Long pedidoId;
+    private Long clienteId;
+    private String enderecoEntrega;
+    private String cep;
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status;
 
 }

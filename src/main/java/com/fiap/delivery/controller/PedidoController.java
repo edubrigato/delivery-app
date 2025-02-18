@@ -28,8 +28,9 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void finalizarPedido(@RequestParam Long idPedido) {
-        finalizarPedidoUseCase.finalizarPedido(idPedido);
+    public void finalizarPedido(@RequestParam Long idPedido,
+                                @RequestParam String cpf) {
+        finalizarPedidoUseCase.finalizarPedido(idPedido, cpf);
         log.info("Pedido {} atualizado com sucesso", idPedido);
     }
 }

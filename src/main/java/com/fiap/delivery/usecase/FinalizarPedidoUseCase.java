@@ -12,7 +12,7 @@ public class FinalizarPedidoUseCase {
     private final PedidoGateway pedidoGateway;
 
     @Transactional
-    public void finalizarPedido(Long idPedido) {
-        pedidoGateway.finalizarPedido(idPedido);
+    public void finalizarPedido(Long idPedido, String cpf) {
+        pedidoGateway.finalizarPedido(idPedido, cpf);
     }
 }

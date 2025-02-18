@@ -2,6 +2,7 @@ package com.fiap.delivery.config.mapper;
 
 import com.fiap.delivery.controller.json.PedidoJson;
 import com.fiap.delivery.domain.Pedido;
+import com.fiap.delivery.gateway.db.entity.PedidoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -10,7 +11,7 @@ public interface PedidoMapper {
 
     PedidoMapper INSTANCE = Mappers.getMapper(PedidoMapper.class);
 
+    PedidoEntity toEntity(Pedido pedido);
     Pedido toData(PedidoEntity pedidoEntity);
     PedidoJson toJson(Pedido pedido);
-    PedidoEntity toEntity(Pedido pedido);
 }

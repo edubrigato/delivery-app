@@ -12,7 +12,5 @@ public interface EntregadorMapper {
     EntregadorMapper INSTANCE = Mappers.getMapper(EntregadorMapper.class);
 
     EntregadorEntity toEntity(Entregador entregador);
-
     Entregador toData(EntregadorJson entregadorJson);
-
 }

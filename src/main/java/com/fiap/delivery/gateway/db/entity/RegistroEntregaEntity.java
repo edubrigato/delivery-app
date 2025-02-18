@@ -5,31 +5,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
+@Table(name = "registro")
 @Entity
-@Table(name = "entregador")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class EntregadorEntity {
+public class RegistroEntregaEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
     private String cpf;
-    private String nome;
-    private String endereco;
-    private String telefone;
-    private String placaVeiculo;
-    private LocalDate dataNascimento;
+    private Long idPedido;
 
 }
