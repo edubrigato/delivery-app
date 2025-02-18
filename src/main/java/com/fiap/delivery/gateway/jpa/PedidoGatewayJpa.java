@@ -42,10 +42,22 @@ public class PedidoGatewayJpa implements PedidoGateway {
             throw new PedidoNaoEncontradoException("Pedido não encontrado");
         }
         Pedido pedido = PedidoMapper.INSTANCE.toData(pedidoRepository.findByPedidoId(idPedido));
-        pedido.setStatus(StatusPedido.ENTREGUE);
+        pedido.setStatus(StatusPedido.FINALIZADO);
         pedidoRepository.save(PedidoMapper.INSTANCE.toEntity(pedido));
         deliveryQueueGateway.sendDelivery(pedido);
         criarRegistroEntregaUseCase.criar(cpf, idPedido);
+        log.info("Pedido finalizado e enviado a fila");
+    }
+
+    @Override
+    public void atualizarPedido(Long idPedido, String cpf) {
+        if (!pedidoRepository.existsByPedidoId(idPedido)) {
+            throw new PedidoNaoEncontradoException("Pedido não encontrado");
+        }
+        Pedido pedido = PedidoMapper.INSTANCE.toData(pedidoRepository.findByPedidoId(idPedido));
+        pedido.setStatus(StatusPedido.EM_ENTREGA);
+        pedidoRepository.save(PedidoMapper.INSTANCE.toEntity(pedido));
+        deliveryQueueGateway.sendDelivery(pedido);
         log.info("Pedido finalizado e enviado a fila");
     }
 }

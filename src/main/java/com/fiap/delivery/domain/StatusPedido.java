@@ -3,7 +3,8 @@ package com.fiap.delivery.domain;
 public enum StatusPedido {
 
     PENDENTE(1),
-    ENTREGUE(2);
+    FINALIZADO(2),
+    EM_ENTREGA(3);
 
     private final int id;
 

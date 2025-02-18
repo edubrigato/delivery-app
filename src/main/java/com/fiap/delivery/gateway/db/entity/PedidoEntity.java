@@ -23,7 +23,7 @@ public class PedidoEntity {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
     private Long pedidoId;
-    private Long clienteId;
+    private String cpf;
     private String enderecoEntrega;
     private String cep;
     @Enumerated(EnumType.STRING)

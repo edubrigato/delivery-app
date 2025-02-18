@@ -11,4 +11,6 @@ public interface PedidoGateway {
     void salvar(Pedido pedido);
 
     void finalizarPedido(Long idPedido,String cpf);
+
+    void atualizarPedido(Long idPedido,String cpf);
 }

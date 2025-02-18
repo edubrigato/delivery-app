@@ -16,7 +16,7 @@ public class PedidoJson {
 
     private UUID id;
     private Long pedidoId;
-    private Long clienteId;
+    private String cpf;
     private String enderecoEntrega;
     private StatusPedido status;
     private String cep;

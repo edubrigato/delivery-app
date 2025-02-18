@@ -1,6 +1,7 @@
 package com.fiap.delivery.gateway.queue.core;
 
 import com.fiap.delivery.domain.Pedido;
+import com.fiap.delivery.domain.StatusPedido;
 import com.fiap.delivery.gateway.PedidoGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class PedidoQueueGateway implements Consumer<Pedido> {
                 String cep = partes[1].trim().replaceAll("[^\\d]", "");
                 pedido.setCep(cep);
             }
+            pedido.setStatus(StatusPedido.PENDENTE);
             pedidoGateway.salvar(pedido);
             log.info("Pedido salvo");
         } catch (RuntimeException e){

@@ -2,6 +2,7 @@ package com.fiap.delivery.controller;
 
 import com.fiap.delivery.config.mapper.PedidoMapper;
 import com.fiap.delivery.controller.json.PedidoJson;
+import com.fiap.delivery.usecase.AtualizarPedidoUseCase;
 import com.fiap.delivery.usecase.FinalizarPedidoUseCase;
 import com.fiap.delivery.usecase.ObterPedidosUseCase;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class PedidoController {
 
     private final ObterPedidosUseCase obterPedidosUseCase;
     private final FinalizarPedidoUseCase finalizarPedidoUseCase;
+    private final AtualizarPedidoUseCase atualizarPedidoUseCase;
 
     @GetMapping()
     public ResponseEntity<List<PedidoJson>> obterPedidosPorCep(@RequestParam String cep) {
@@ -31,6 +33,15 @@ public class PedidoController {
     public void finalizarPedido(@RequestParam Long idPedido,
                                 @RequestParam String cpf) {
         finalizarPedidoUseCase.finalizarPedido(idPedido, cpf);
+        log.info("Pedido {} atualizado com sucesso", idPedido);
+    }
+
+
+    @PatchMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void atualizarPedido(@RequestParam Long idPedido,
+                                @RequestParam String cpf) {
+        atualizarPedidoUseCase.atualizarPedido(idPedido, cpf);
         log.info("Pedido {} atualizado com sucesso", idPedido);
     }
 }

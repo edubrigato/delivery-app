@@ -15,7 +15,7 @@ public class Pedido {
 
     private UUID id;
     private Long pedidoId;
-    private Long clienteId;
+    private String cpf;
     private String enderecoEntrega;
     private String cep;
     private StatusPedido status;
