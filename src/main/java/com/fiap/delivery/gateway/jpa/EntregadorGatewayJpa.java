@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EntregadorGateway implements com.fiap.delivery.gateway.EntregadorGateway {
+public class EntregadorGatewayJpa implements com.fiap.delivery.gateway.EntregadorGateway {
 
     private final EntregadorRepository entregadorRepository;
 

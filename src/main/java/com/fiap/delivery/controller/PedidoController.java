@@ -30,18 +30,20 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void finalizarPedido(@RequestParam Long idPedido,
-                                @RequestParam String cpf) {
-        finalizarPedidoUseCase.finalizarPedido(idPedido, cpf);
+    public ResponseEntity<String> finalizarPedido(@RequestParam Long idPedido,
+                                @RequestParam String cpfEntregador) {
+        finalizarPedidoUseCase.finalizarPedido(idPedido, cpfEntregador);
         log.info("Pedido {} atualizado com sucesso", idPedido);
+        return new ResponseEntity<>("Pedido finalizado com sucesso", HttpStatus.OK);
     }
 
 
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    public void atualizarPedido(@RequestParam Long idPedido,
-                                @RequestParam String cpf) {
-        atualizarPedidoUseCase.atualizarPedido(idPedido, cpf);
+    public ResponseEntity<String> atualizarPedido(@RequestParam Long idPedido,
+                                @RequestParam String cpfEntregador) {
+        atualizarPedidoUseCase.atualizarPedido(idPedido, cpfEntregador);
         log.info("Pedido {} atualizado com sucesso", idPedido);
+        return new ResponseEntity<>("Entrega iniciada", HttpStatus.OK);
     }
 }

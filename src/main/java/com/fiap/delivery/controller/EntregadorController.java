@@ -18,14 +18,16 @@ public class EntregadorController {
     private final CriarEntregadorUseCase criarEntregadorUseCase;
 
     @PostMapping
-    public ResponseEntity<Void> criarEntregador(@RequestBody EntregadorJson entregador) {
+    public ResponseEntity<String> criarEntregador(@RequestBody EntregadorJson entregador) {
         criarEntregadorUseCase.criarEntregador(EntregadorMapper.INSTANCE.toData(entregador));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        log.info("Entregador criado com sucesso");
+        return new ResponseEntity<>("Entregador criado com sucesso", HttpStatus.CREATED);
     }
 
     @PatchMapping
-    private ResponseEntity<Void> updateEntregador(@RequestBody EntregadorJson entregador) {
+    public ResponseEntity<String> updateEntregador(@RequestBody EntregadorJson entregador) {
         criarEntregadorUseCase.atualizarEntregador(EntregadorMapper.INSTANCE.toData(entregador));
-        return new ResponseEntity<>(HttpStatus.OK);
+        log.info("Entregador atualizado com sucesso");
+        return new ResponseEntity<>("Entregador atualizado com sucesso", HttpStatus.OK);
     }
 }

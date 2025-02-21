@@ -18,18 +18,12 @@ public class PedidoQueueGateway implements Consumer<Pedido> {
 
     @Override
     public void accept(Pedido pedido) {
-        try {
-            log.info("Pedido recebido");
-            String enderecoEntrega = pedido.getEnderecoEntrega().trim();
-            String[] partes = enderecoEntrega.split(",");
-            if (partes.length > 0) {
-                String cep = partes[0].trim().replaceAll("[^\\d]", "");
-                pedido.setCep(cep);}
-            pedido.setStatus(StatusPedido.PENDENTE);
-            pedidoGateway.salvar(pedido);
-            log.info("Pedido salvo");
-        } catch (RuntimeException e){
-            log.error("Erro ao salvar no banco de dados", e);
-        }
+        log.info("Pedido recebido");
+        int index = pedido.getEnderecoEntrega().indexOf(",");
+        pedido.setCep(pedido.getEnderecoEntrega().substring(0, index).trim());
+        pedido.setEnderecoEntrega(pedido.getEnderecoEntrega().substring(index + 1).trim());
+        pedido.setStatus(StatusPedido.PENDENTE);
+        pedidoGateway.salvar(pedido);
+        log.info("Pedido salvo");
     }
 }

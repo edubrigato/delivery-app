@@ -1,14 +1,12 @@
 package com.fiap.delivery.gateway.db.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fiap.delivery.domain.StatusPedido;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Table(name = "registro")
@@ -19,10 +17,13 @@ import java.util.UUID;
 public class RegistroEntregaEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private String cpf;
+    private LocalDateTime dataInicio;
+    private LocalDateTime dataEntrega;
+    private String cpfEntregador;
     private Long idPedido;
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status;
 
 }

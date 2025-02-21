@@ -6,9 +6,7 @@ import com.fiap.delivery.domain.StatusPedido;
 import com.fiap.delivery.exception.PedidoNaoEncontradoException;
 import com.fiap.delivery.gateway.PedidoGateway;
 import com.fiap.delivery.gateway.db.entity.PedidoEntity;
-import com.fiap.delivery.gateway.db.entity.RegistroEntregaEntity;
 import com.fiap.delivery.gateway.db.repository.PedidoRepository;
-import com.fiap.delivery.gateway.db.repository.RegistroEntregaRepository;
 import com.fiap.delivery.gateway.queue.IDeliveryQueueGateway;
 import com.fiap.delivery.usecase.CriarRegistroEntregaUseCase;
 import lombok.RequiredArgsConstructor;
@@ -28,36 +26,50 @@ public class PedidoGatewayJpa implements PedidoGateway {
 
     @Override
     public List<Pedido> obterPedidosPorCep(String cep) {
-        return pedidoRepository.findByCepEntrega(cep).stream().map(PedidoMapper.INSTANCE::toData).toList();
+        return pedidoRepository.findByCepEntrega(cep)
+                .stream()
+                .map(PedidoMapper.INSTANCE::toData)
+                .toList();
     }
 
     @Override
     public void salvar(Pedido pedido) {
-        pedidoRepository.saveAndFlush(PedidoMapper.INSTANCE.toEntity(pedido));
+        PedidoEntity pedidoEntity = PedidoMapper.INSTANCE.toEntity(pedido);
+        pedidoRepository.saveAndFlush(pedidoEntity);
     }
 
     @Override
-    public void finalizarPedido(Long idPedido,String cpf) {
-        if (!pedidoRepository.existsByPedidoId(idPedido)) {
-            throw new PedidoNaoEncontradoException("Pedido não encontrado");
-        }
-        Pedido pedido = PedidoMapper.INSTANCE.toData(pedidoRepository.findByPedidoId(idPedido));
+    public void finalizarPedido(Long idPedido, String cpf) {
+        Pedido pedido = buscarPedidoOuFalhar(idPedido);
         pedido.setStatus(StatusPedido.FINALIZADO);
-        pedidoRepository.save(PedidoMapper.INSTANCE.toEntity(pedido));
-        deliveryQueueGateway.sendDelivery(pedido);
-        criarRegistroEntregaUseCase.criar(cpf, idPedido);
+        salvarPedidoComStatusAtualizado(pedido);
+        enviarParaFilaEPersistirRegistro(pedido, cpf, StatusPedido.FINALIZADO);
         log.info("Pedido finalizado e enviado a fila");
     }
 
     @Override
     public void atualizarPedido(Long idPedido, String cpf) {
+        Pedido pedido = buscarPedidoOuFalhar(idPedido);
+        pedido.setStatus(StatusPedido.EM_ENTREGA);
+        salvarPedidoComStatusAtualizado(pedido);
+        enviarParaFilaEPersistirRegistro(pedido, cpf, StatusPedido.EM_ENTREGA);
+        log.info("Pedido atualizado e enviado a fila");
+    }
+
+    private Pedido buscarPedidoOuFalhar(Long idPedido) {
         if (!pedidoRepository.existsByPedidoId(idPedido)) {
             throw new PedidoNaoEncontradoException("Pedido não encontrado");
         }
-        Pedido pedido = PedidoMapper.INSTANCE.toData(pedidoRepository.findByPedidoId(idPedido));
-        pedido.setStatus(StatusPedido.EM_ENTREGA);
-        pedidoRepository.save(PedidoMapper.INSTANCE.toEntity(pedido));
+        return PedidoMapper.INSTANCE.toData(pedidoRepository.findByPedidoId(idPedido));
+    }
+
+    private void salvarPedidoComStatusAtualizado(Pedido pedido) {
+        PedidoEntity pedidoEntity = PedidoMapper.INSTANCE.toEntity(pedido);
+        pedidoRepository.save(pedidoEntity);
+    }
+
+    private void enviarParaFilaEPersistirRegistro(Pedido pedido, String cpf, StatusPedido status) {
         deliveryQueueGateway.sendDelivery(pedido);
-        log.info("Pedido finalizado e enviado a fila");
+        criarRegistroEntregaUseCase.criar(cpf, pedido.getPedidoId(), status);
     }
 }

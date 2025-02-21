@@ -6,4 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface RegistroEntregaRepository extends JpaRepository<RegistroEntregaEntity, UUID> {
+
+    RegistroEntregaEntity findByIdPedido(Long idPedido);
+    
 }
